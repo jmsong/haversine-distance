@@ -1,4 +1,6 @@
 <resources>
-    <string name="app_name">HaversineDistance</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="app_name">Haversine Distance</string>
+    <string name="title_activity_maps">Haversine Distance</string>
+    <string name="title_tutorial">Haversine Distance</string>
+    <string name="desc_tutorial">You can drag and drop marker around map to measure distance between two points</string>
 </resources>

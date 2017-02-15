@@ -15,8 +15,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.Target;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -43,6 +47,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private int padding;
     private ArrayList<Marker> markerList;
     private Polyline polyline;
+    private View targetView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +67,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         markerList = new ArrayList<>(2);
 
         registerViewHeightChanged();
+
+        // show tutorial layer
+        showHelpForView(findViewById(android.R.id.content));
     }
 
     @Override
@@ -123,26 +131,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 reloadMap();
             }
         });
-
-        mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
-            @Override
-            public void onCameraIdle() {
-                final ViewGroup viewGroup = (ViewGroup) ((ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
-                findView(viewGroup);
-            }
-        });
-    }
-
-    private void findView(ViewGroup viewGroup) {
-        for (int i = 0, N = viewGroup.getChildCount(); i < N; i++) {
-            View child = viewGroup.getChildAt(i);
-            if (child instanceof ViewGroup) {
-                findView((ViewGroup) child);
-                Log.e(">>> Group :", child.getClass().getSimpleName());
-            } else {
-                Log.e(">>>>>>>> View :", child.getClass().getSimpleName());
-            }
-        }
     }
 
     private void reloadMap() {
@@ -249,5 +237,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             });
         }
+    }
+
+    private void showHelpForView(View viewTarget) {
+        new ShowcaseView.Builder(this)
+                .withMaterialShowcase()
+                .setTarget(new ViewTarget(viewTarget))
+                .setContentTitle(R.string.title_tutorial)
+                .setContentText(R.string.desc_tutorial)
+                .setStyle(R.style.CustomShowcaseTheme)
+                .build();
     }
 }
